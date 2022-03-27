@@ -20,7 +20,9 @@ Future<String> callFunction(String functionName, List<dynamic> args,
   final res = await ethClient.sendTransaction(
       credentials,
       Transaction.callContract(
-          contract: deployedContract, function: ethFunction, parameters: args));
+          contract: deployedContract, function: ethFunction, parameters: args),
+      chainId: null,
+      fetchChainIdFromNetworkId: true);
 
   return res;
 }
@@ -52,7 +54,7 @@ Future<String> authVoter(String address, Web3Client ethClient) async {
       [EthereumAddress.fromHex(address)], ethClient, owner_private_key);
 
   if (kDebugMode) {
-    print('Candidate added successfully');
+    print('voter authorized successfully');
   }
 
   return response;
@@ -68,11 +70,32 @@ Future<List<dynamic>> ask(
   return res;
 }
 
-Future<List> voterCount(Web3Client ethClient) async {
+Future<List> getCandidatesCount(Web3Client ethClient) async {
   List<dynamic> res = await ask(get_total_candidates, [], ethClient);
 
   if (kDebugMode) {
     print('Candidate added successfully');
+  }
+
+  return res;
+}
+
+Future<List> getTotalVotes(Web3Client ethClient) async {
+  List<dynamic> res = await ask(get_total_votes, [], ethClient);
+
+  if (kDebugMode) {
+    print('get total votes successfully');
+  }
+
+  return res;
+}
+
+Future<List> getCandidateInfo(int index, Web3Client ethClient) async {
+  List<dynamic> res =
+      await ask(get_candidate_info, [BigInt.from(index)], ethClient);
+
+  if (kDebugMode) {
+    print('get candidate info successfully');
   }
 
   return res;

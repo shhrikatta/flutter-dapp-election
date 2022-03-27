@@ -52,6 +52,14 @@ contract Election {
         return candidates.length;
     }
 
+    function getTotalVotes() public view returns(uint) {
+        return totalVotes;
+    }
+
+    function getCandidateInfo(uint index) public view returns (Candidate memory) {
+        return candidates[index];
+    }
+
     function vote(uint _candidateIndex) public {
         require(!voters[msg.sender].isVoted);
         require(voters[msg.sender].isAuthorised);
